@@ -9,6 +9,8 @@
 #define RESEAU_H_
 #define NBCOUCHE 2
 #include <vector>
+#define BORNESUP 1;
+#define BORNEINF -1;
 using namespace std;
 
 

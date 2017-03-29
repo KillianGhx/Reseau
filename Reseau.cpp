@@ -23,9 +23,18 @@ Reseau::Reseau(){
 
 	for (int i =0 ; i < NBCOUCHE ; i++){
 		for(int j = 0 ; j < taille[i] ; j++ ){
-			out[i][j] = 2;
+			out[i][j] = 0;
 		}
 	}
+
+	for(int i = 0; i < (NBCOUCHE-1) ; i++){
+		for(int j = 0;j<taille[i];j++){
+			for (int k = 0; k < taille[i+1];k++){
+				poids[i][j+k]=i+j+k;
+			}
+		}
+	}
+
 
 }
 
@@ -36,10 +45,11 @@ void Reseau::input(vector<double> input){
 }
 
 void Reseau::affiche(){
-	for (int i = 0;i< NBCOUCHE;i++){
-		cout << "affichage de la couche " << i << " : "<< endl;
-		for (int j = 0; j < taille[i];j++){
-			cout << "Neurone " << i << " : " << out[i][j] << endl;
+	cout << "affichage des poids " << endl;
+	for (int i = 0;i<(NBCOUCHE-1) ;i++){
+		for(int j = 0;i< taille[i+1];j++){
+			cout << poids[i][j];
 		}
 	}
+
 }
