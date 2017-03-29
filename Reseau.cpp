@@ -13,27 +13,6 @@
 using namespace std;
 
 Reseau::Reseau() {
-//	int n;
-//	taille[0]=1;
-//	for(int i = 1; i < NBCOUCHE ; i++){
-//		cout << "rentrer le nombre de neurone dans la couche "<< i << endl;
-//		cin >> n ;
-//		taille[i] = n;
-//	}
-//
-//	for (int i =0 ; i < NBCOUCHE ; i++){
-//		for(int j = 0 ; j < taille[i] ; j++ ){
-//			out[i][j] = 0;
-//		}
-//	}
-//
-//	for(int i = 0; i < (NBCOUCHE-1) ; i++){
-//		for(int j = 0;j<taille[i];j++){
-//			for (int k = 0; k < taille[i+1];k++){
-//				poids[i][j+k]=i+j+k;
-//			}
-//		}
-//	}
 	srand(time(NULL));
 	int n;
 	int nbCoucheCacher = 1;
@@ -73,17 +52,6 @@ Reseau::Reseau(vector <int> in) {
 	srand(time(NULL));
 	int nbCoucheCacher = 1;
 	for (int i = 0; i < NBCOUCHE; i++) {
-		if (i == 0) {
-			cout << "Entrez le nombre de neurone pour la couche de sortie "
-					<< endl;
-		} else if ((i + 1) == NBCOUCHE) {
-			cout << "Entrez le nombre de neurone pour la couche d'entrée  "
-					<< endl;
-		} else {
-			cout << "Entrez le nombre de neurone pour la couche caché  "
-					<< nbCoucheCacher << endl;
-			nbCoucheCacher++;
-		}
 		taille[i] = in.at(i);
 	}
 	int index = 0;
@@ -107,17 +75,6 @@ Reseau::Reseau(vector <int> couche, vector <double> pds) {
 	srand(time(NULL));
 	int nbCoucheCacher = 1;
 	for (int i = 0; i < NBCOUCHE; i++) {
-		if (i == 0) {
-			cout << "Entrez le nombre de neurone pour la couche de sortie "
-					<< endl;
-		} else if ((i + 1) == NBCOUCHE) {
-			cout << "Entrez le nombre de neurone pour la couche d'entrée  "
-					<< endl;
-		} else {
-			cout << "Entrez le nombre de neurone pour la couche caché  "
-					<< nbCoucheCacher << endl;
-			nbCoucheCacher++;
-		}
 		taille[i] = couche.at(i);
 	}
 	int index = 0;
