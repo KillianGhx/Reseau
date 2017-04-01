@@ -11,6 +11,7 @@
 #include <vector>
 #define BORNESUP 1
 #define BORNEINF -1
+#define MAX 40
 using namespace std;
 
 
@@ -18,9 +19,9 @@ class Reseau{
 
 private :
 	int taille[NBCOUCHE];
-	double out[NBCOUCHE][40];
-	double poids[NBCOUCHE-1][40];
-	double signal[NBCOUCHE-1][40];
+	double out[NBCOUCHE][MAX];
+	double poids[NBCOUCHE-1][MAX];
+	double signal[NBCOUCHE-1][MAX];
 
 public :
 	Reseau();
@@ -30,9 +31,11 @@ public :
 	void affiche();
 	void afficheT();
 	void input(vector<double> input);
-	void enavant(){};
+	void enavant();
 	void enariere(){};
 	int maxTaille();
+	double sigmoide(double);
+
 
 };
 

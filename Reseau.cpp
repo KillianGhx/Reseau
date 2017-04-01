@@ -9,6 +9,7 @@
 #include <ctime>
 #include <random>
 #include <cstdlib>
+#include <math.h>
 
 using namespace std;
 
@@ -50,7 +51,6 @@ Reseau::Reseau() {
 
 Reseau::Reseau(vector <int> in) {
 	srand(time(NULL));
-	int nbCoucheCacher = 1;
 	for (int i = 0; i < NBCOUCHE; i++) {
 		taille[i] = in.at(i);
 	}
@@ -73,7 +73,6 @@ Reseau::Reseau(vector <int> in) {
 
 Reseau::Reseau(vector <int> couche, vector <double> pds) {
 	srand(time(NULL));
-	int nbCoucheCacher = 1;
 	for (int i = 0; i < NBCOUCHE; i++) {
 		taille[i] = couche.at(i);
 	}
@@ -152,7 +151,7 @@ void Reseau::affiche() {
 	cout << "Nombre de couche : " << NBCOUCHE << endl;
 	for (int i = 0; i < NBCOUCHE; i++) {
 		if (i == 0) {
-			cout << "Nombre de neurone dans la couche de sortie : "
+			cout << "Nombre e neurone dans la couche de sortie : "
 					<< taille[indexT] << endl;
 			indexT++;
 			int indexX=0;
@@ -178,6 +177,7 @@ void Reseau::affiche() {
 			indexCouche++;
 			indexPds2++;
 			indexPds++;
+			cout << endl;
 		} else if ((i + 1) == NBCOUCHE) {
 			cout << "Nombre de neurone dans la couche d'entre : "
 					<< taille[indexT] << endl;
@@ -223,3 +223,40 @@ void Reseau::affiche() {
 	}
 
 }
+
+void Reseau::enavant(){
+	int indexCouche = NBCOUCHE - 2; // On va defiler out et on s'arretera lorsqu'il atteindra la sortie
+
+	int memo;
+	while( indexCouche >= 0 ){
+		int indexPds=0;
+		int k=0;
+		for(int i=0; i < taille[indexCouche]; i++){
+			for(int j=indexPds; j < (taille[indexCouche+1]+1)+indexPds ; j++  ){
+				if((j%(taille[indexCouche+1]+1)) == 0){ //Alors c'est le biais
+					out[indexCouche][i] += poids[indexCouche][j];
+				}
+				else{
+
+
+					out[indexCouche][i] += poids[indexCouche][j] * out[indexCouche+1][k];
+					k++;
+				}
+
+				memo=j;
+			}
+			cout << "Valeur avant sigmoide : " << out[indexCouche][i] << endl;
+
+			out[indexCouche][i] = sigmoide(out[indexCouche][i]);
+
+			cout << "Valeur apres sigmoide : " << out[indexCouche][i] << endl;
+			k=0;
+			indexPds=memo+1;
+		}
+		indexCouche--;
+	}
+}
+
+double Reseau::sigmoide(double val){
+		return (1/(1+exp(-val)));
+	}
