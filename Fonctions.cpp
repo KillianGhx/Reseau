@@ -39,20 +39,19 @@ void Fonctions::poserReseau(int sizeAp,int sizeTest){
 	//remplissage de l'ensemble de test
 		for (int i = 0;i< sizeTest;i++){
 			tmp = {abs(rand()%5),abs((rand()%6)+1),abs(rand()%5),abs(rand()%5)};
-
+			appartient = false;
 			for(it = aprentissage.begin();it != aprentissage.end();it ++){
 				if((*it)==tmp){
 					appartient=true;
 				}
-				else appartient=false;
 			}
 
-			if(!appartient){
-				test.push_back(tmp);
-				targetTest.push_back(peutPoser1(tmp));
+			if(appartient){
+				i--;
 			}
 			else{
-				i--;
+				test.push_back(tmp);
+				targetTest.push_back(peutPoser1(tmp));
 			}
 		}
 
@@ -126,12 +125,11 @@ void Fonctions::poserReseau2(int sizeAp,int sizeTest){
 	//remplissage de l'ensemble de test
 	for (int i = 0;i< sizeTest;i++){
 		tmp = {abs(rand()%5),abs(rand()%6+1),abs(rand()%5),abs(rand()%5),abs(rand()%5),abs(rand()%5),abs(rand()%5)};
-
+		appartient =false;
 		for(it = aprentissage.begin();it != aprentissage.end();it ++){
 			if((*it)==tmp){
 				appartient=true;
 			}
-			else appartient=false;
 		}
 
 		if(!appartient){
