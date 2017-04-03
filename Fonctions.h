@@ -12,7 +12,8 @@
 class Fonctions{
 public :
 	Fonctions(){};
-	static void poserReseau(int sizeAp,int sizeTestSS);
+	static void poserReseau2(int sizeAp,int sizeTest);
+	static void poserReseau(int sizeAp,int sizeTest);
 };
 
 
