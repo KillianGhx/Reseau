@@ -27,9 +27,11 @@ int main(){
 	}
 
 	r->getDelta2();
+	cout << "Entrez une touche pour reprendre !"<< endl;
 	cin.get();
 
-	int i = 0;
+
+	int compteur = 0;
 	while (errM > 0.1) {
 		errM+=r->backprop( { 0, 0 }, 0);
 
@@ -39,12 +41,12 @@ int main(){
 		errM/=4;
 		cout << errM << endl;
 		r->affiche();
-		i++;
+		compteur++;
 		cout << "Erreur moyenne : " << errM << endl;
 	}
+	cout << " Fini en " << compteur << " itération :) "<< endl;
 
 	r->getDelta2();
-	cout << " FIN " << endl;
 
 
 }
