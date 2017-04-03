@@ -42,6 +42,9 @@ public :
 	void getDelta(int i, int j);
 	void getDelta2();
 	double majPoid(double signal, double out);
+	double getSortie(){
+		return out[0][0];
+	}
 
 
 	template<class T> T abs(T nbr) {

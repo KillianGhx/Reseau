@@ -22,10 +22,10 @@ Reseau::Reseau() {
 			cout << "Entrez le nombre de neurone pour la couche de sortie "
 					<< endl;
 		} else if ((i + 1) == NBCOUCHE) {
-			cout << "Entrez le nombre de neurone pour la couche d'entrée  "
+			cout << "Entrez le nombre de neurone pour la couche d'entrÃ©e  "
 					<< endl;
 		} else {
-			cout << "Entrez le nombre de neurone pour la couche caché  "
+			cout << "Entrez le nombre de neurone pour la couche cachÃ©  "
 					<< nbCoucheCacher << endl;
 			nbCoucheCacher++;
 		}
@@ -322,27 +322,28 @@ double Reseau::backprop(vector <double> in, double target){
 			if (i % (taille[indexCouche + 1] + 1) == 0) { // Si c'est le biais
 				poids[indexCouche][i] += majPoid(signal[indexCouche][nbE], 1);
 			} else {
-
-				poids[indexCouche][i] += majPoid(signal[indexCouche][nbE], out[indexCouche + 1][i-1]);
+				poids[indexCouche][i] += majPoid(signal[indexCouche][nbE], out[indexCouche + 1][i-1-memoPds2]);
 			}
 		memoPds++;
 		}
 	}
 	indexCouche++; //On passe a la couche suivante
 
-	for (int c = 0; c < (NBCOUCHE - 2); c++) { // Boucle pour les couches cachées
+	for (int c = 0; c < (NBCOUCHE - 2); c++) { // Boucle pour les couches cachÃ©es
 		int indexPds=0;
-		for (int j = 0; j < taille[indexCouche]; j++) { // Boucle pour le nb de neuronne dans la couche cache
+		for (int j = 0; j < taille[indexCouche]; j++) { // Boucle pour le nb de neurone dans la couche cache
 			signal[indexCouche][j] = out[indexCouche][j] * (1 - out[indexCouche][j]);
+			int somme = 0;
 			for (int i = 0; i < taille[indexCouche - 1]; i++) { // Boucle nombre de connexion entrante
-				signal[indexCouche][j] *= signal[indexCouche-1][i] * poids[indexCouche - 1][i+1];
+				somme +=  signal[indexCouche-1][i] * poids[indexCouche - 1][(i*(taille[indexCouche]+1))+1+j]; //avant poids[indexCouche - 1][i+j+1]
 			}
+			signal[indexCouche][j] *= somme;
 			int memo=indexPds;
 			for(int i=memo; i < (taille[indexCouche+1]+1)+memo; i++){ // boucle pour les nombre de poids a changer
 				if(i%(taille[indexCouche+1]+1)==0){
-					poids[indexCouche][i] += majPoid(signal[indexCouche][c], 1);
+					poids[indexCouche][i] += majPoid(signal[indexCouche][j], 1);
 				}else{
-					poids[indexCouche][i] += majPoid(signal[indexCouche][c], out[indexCouche+1][i-1]);
+					poids[indexCouche][i] += majPoid(signal[indexCouche][j], out[indexCouche+1][i-1-memo]);
 				}
 				indexPds++;
 			}
