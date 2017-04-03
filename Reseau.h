@@ -12,6 +12,7 @@
 #define BORNESUP 1
 #define BORNEINF -1
 #define MAX 40
+#define PAS  0.1
 using namespace std;
 
 
@@ -23,6 +24,7 @@ private :
 	double poids[NBCOUCHE-1][MAX];
 	double signal[NBCOUCHE-1][MAX];
 
+
 public :
 	Reseau();
 	~Reseau();
@@ -31,10 +33,22 @@ public :
 	void affiche();
 	void afficheT();
 	void input(vector<double> input);
-	void enavant();
-	void enariere(){};
+	void transfert();
+	double backprop(vector <double> in, double target);
+	double signalErreur(double target, double out);
 	int maxTaille();
 	double sigmoide(double);
+	void getDelta();
+	void getDelta(int i, int j);
+	void getDelta2();
+	double majPoid(double signal, double out);
+
+
+	template<class T> T abs(T nbr) {
+	    if(nbr >= 0) return nbr;
+	    else        return -nbr;
+	}
+
 
 
 };

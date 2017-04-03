@@ -46,6 +46,11 @@ Reseau::Reseau() {
 		}
 		index++;
 	}
+	for(int i=0 ; i < NBCOUCHE - 1; i++){
+		for(int j = 0; j < MAX; j ++){
+			signal[i][j]=0;
+		}
+	}
 
 }
 
@@ -67,6 +72,11 @@ Reseau::Reseau(vector <int> in) {
 			poids[i][j] = (rand()%(1000*(BORNESUP-(BORNEINF))+1))/1000.+(BORNEINF);
 		}
 		index++;
+	}
+	for(int i=0 ; i < NBCOUCHE - 1; i++){
+		for(int j = 0; j < MAX; j ++){
+			signal[i][j]=0;
+		}
 	}
 
 }
@@ -92,7 +102,11 @@ Reseau::Reseau(vector <int> couche, vector <double> pds) {
 		}
 		index++;
 	}
-
+	for(int i=0 ; i < NBCOUCHE - 1; i++){
+		for(int j = 0; j < MAX; j ++){
+			signal[i][j]=0;
+		}
+	}
 }
 
 int Reseau::maxTaille() {
@@ -224,9 +238,8 @@ void Reseau::affiche() {
 
 }
 
-void Reseau::enavant(){
+void Reseau::transfert(){
 	int indexCouche = NBCOUCHE - 2; // On va defiler out et on s'arretera lorsqu'il atteindra la sortie
-
 	int memo;
 	while( indexCouche >= 0 ){
 		int indexPds=0;
@@ -234,21 +247,16 @@ void Reseau::enavant(){
 		for(int i=0; i < taille[indexCouche]; i++){
 			for(int j=indexPds; j < (taille[indexCouche+1]+1)+indexPds ; j++  ){
 				if((j%(taille[indexCouche+1]+1)) == 0){ //Alors c'est le biais
-					out[indexCouche][i] += poids[indexCouche][j];
+					out[indexCouche][i] = poids[indexCouche][j];
 				}
 				else{
-
-
 					out[indexCouche][i] += poids[indexCouche][j] * out[indexCouche+1][k];
 					k++;
 				}
-
 				memo=j;
 			}
 			cout << "Valeur avant sigmoide : " << out[indexCouche][i] << endl;
-
 			out[indexCouche][i] = sigmoide(out[indexCouche][i]);
-
 			cout << "Valeur apres sigmoide : " << out[indexCouche][i] << endl;
 			k=0;
 			indexPds=memo+1;
@@ -260,3 +268,88 @@ void Reseau::enavant(){
 double Reseau::sigmoide(double val){
 		return (1/(1+exp(-val)));
 	}
+
+void Reseau::getDelta(){
+	int j = taille[1]+1;
+	for(int i=0; i < j; i++){
+		switch (i) {
+		case 0:
+			cout << "Delta = ("<< poids[0][i] <<") ";
+			break;
+		case 1:
+			cout << "+ (" << poids[0][i] << ") * x ";
+			break;
+		case 2:
+			cout << "+ (" << poids[0][i] << ") * y ";
+			break;
+		case 3:
+			cout << "+ (" << poids[0][i] << ") * z ";
+			break;
+		}
+	}
+	cout << endl;
+}
+
+void Reseau::getDelta2(){ // MARCHE QUE POUR 2 INCONNU CAD RELIER A 2 NEURONES
+	cout << " y = - ( " << poids[0][1] << " / " << poids[0][2] << ") * x - ( " << poids[0][0] << " / " << poids[0][2] << ")" <<endl;
+}
+
+void Reseau::getDelta(int i, int j){ // MARCHE QUE POUR 2 INCONNU CAD RELIER A 2 NEURONES
+	int h = (j * (taille[i+1] + 1));
+	cout << " y = - ( " << poids[i][h+1] << " / " << poids[i][h+2] << ") * x - ( " << poids[i][h+0] << " / " << poids[i][2] << ")" <<endl;
+}
+
+double Reseau::signalErreur(double target, double out) {
+	return (target - out) * (out) * (1 - out);
+}
+
+double Reseau::majPoid(double signal, double out) {
+	return PAS * signal * out;
+}
+
+
+double Reseau::backprop(vector <double> in, double target){
+	double erreur;
+	int indexCouche=0;
+	this->input(in);
+	this->transfert();
+	int memoPds=0;
+	for (int nbE=0;nbE < taille[0]; nbE++) { //Couche d'entree
+		signal[0][nbE] = signalErreur(target, out[indexCouche][nbE]);
+		cout << "Signal d'erreur : " << signal[0][nbE] << endl;
+		int memoPds2= memoPds;
+		for (int i = memoPds2; i < (taille[indexCouche + 1] + 1)+memoPds2; i++) { // Mise a jour des poids;
+			if (i % (taille[indexCouche + 1] + 1) == 0) { // Si c'est le biais
+				poids[indexCouche][i] += majPoid(signal[indexCouche][nbE], 1);
+			} else {
+
+				poids[indexCouche][i] += majPoid(signal[indexCouche][nbE], out[indexCouche + 1][i-1]);
+			}
+		memoPds++;
+		}
+	}
+	indexCouche++; //On passe a la couche suivante
+
+	for (int c = 0; c < (NBCOUCHE - 2); c++) { // Boucle pour les couches cachées
+		int indexPds=0;
+		for (int j = 0; j < taille[indexCouche]; j++) { // Boucle pour le nb de neuronne dans la couche cache
+			signal[indexCouche][j] = out[indexCouche][j] * (1 - out[indexCouche][j]);
+			for (int i = 0; i < taille[indexCouche - 1]; i++) { // Boucle nombre de connexion entrante
+				signal[indexCouche][j] *= signal[indexCouche-1][i] * poids[indexCouche - 1][i+1];
+			}
+			int memo=indexPds;
+			for(int i=memo; i < (taille[indexCouche+1]+1)+memo; i++){ // boucle pour les nombre de poids a changer
+				if(i%(taille[indexCouche+1]+1)==0){
+					poids[indexCouche][i] += majPoid(signal[indexCouche][c], 1);
+				}else{
+					poids[indexCouche][i] += majPoid(signal[indexCouche][c], out[indexCouche+1][i-1]);
+				}
+				indexPds++;
+			}
+		}
+	indexCouche++; //On passe a la couche suivante
+	}
+	erreur = abs(out[0][0] - target);
+	return erreur;
+}
+
