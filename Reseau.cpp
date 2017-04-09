@@ -14,7 +14,6 @@
 using namespace std;
 
 Reseau::Reseau() {
-	srand(time(NULL));
 	int n;
 	int nbCoucheCacher = 1;
 	for (int i = 0; i < NBCOUCHE; i++) {
@@ -55,7 +54,6 @@ Reseau::Reseau() {
 }
 
 Reseau::Reseau(vector <int> in) {
-	srand(time(NULL));
 	for (int i = 0; i < NBCOUCHE; i++) {
 		taille[i] = in.at(i);
 	}
@@ -82,7 +80,6 @@ Reseau::Reseau(vector <int> in) {
 }
 
 Reseau::Reseau(vector <int> couche, vector <double> pds) {
-	srand(time(NULL));
 	for (int i = 0; i < NBCOUCHE; i++) {
 		taille[i] = couche.at(i);
 	}
@@ -255,9 +252,7 @@ void Reseau::transfert(){
 				}
 				memo=j;
 			}
-			cout << "Valeur avant sigmoide : " << out[indexCouche][i] << endl;
 			out[indexCouche][i] = sigmoide(out[indexCouche][i]);
-			cout << "Valeur apres sigmoide : " << out[indexCouche][i] << endl;
 			k=0;
 			indexPds=memo+1;
 		}
@@ -310,13 +305,16 @@ double Reseau::majPoid(double signal, double out) {
 
 double Reseau::backprop(vector <double> in, double target){
 	double erreur;
+	double somme;
+	int indexPds;
+	int memo;
 	int indexCouche=0;
 	this->input(in);
 	this->transfert();
 	int memoPds=0;
 	for (int nbE=0;nbE < taille[0]; nbE++) { //Couche d'entree
 		signal[0][nbE] = signalErreur(target, out[indexCouche][nbE]);
-		cout << "Signal d'erreur : " << signal[0][nbE] << endl;
+//		cout << "Signal d'erreur : " << signal[0][nbE] << endl;
 		int memoPds2= memoPds;
 		for (int i = memoPds2; i < (taille[indexCouche + 1] + 1)+memoPds2; i++) { // Mise a jour des poids;
 			if (i % (taille[indexCouche + 1] + 1) == 0) { // Si c'est le biais
@@ -330,15 +328,15 @@ double Reseau::backprop(vector <double> in, double target){
 	indexCouche++; //On passe a la couche suivante
 
 	for (int c = 0; c < (NBCOUCHE - 2); c++) { // Boucle pour les couches cachées
-		int indexPds=0;
+		indexPds=0;
 		for (int j = 0; j < taille[indexCouche]; j++) { // Boucle pour le nb de neurone dans la couche cache
 			signal[indexCouche][j] = out[indexCouche][j] * (1 - out[indexCouche][j]);
-			int somme = 0;
+			somme = 0;
 			for (int i = 0; i < taille[indexCouche - 1]; i++) { // Boucle nombre de connexion entrante
 				somme +=  signal[indexCouche-1][i] * poids[indexCouche - 1][(i*(taille[indexCouche]+1))+1+j]; //avant poids[indexCouche - 1][i+j+1]
 			}
 			signal[indexCouche][j] *= somme;
-			int memo=indexPds;
+			memo=indexPds;
 			for(int i=memo; i < (taille[indexCouche+1]+1)+memo; i++){ // boucle pour les nombre de poids a changer
 				if(i%(taille[indexCouche+1]+1)==0){
 					poids[indexCouche][i] += majPoid(signal[indexCouche][j], 1);

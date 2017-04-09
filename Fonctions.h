@@ -14,6 +14,7 @@ public :
 	Fonctions(){};
 	static void poserReseau2(int sizeAp,int sizeTest);
 	static void poserReseau(int sizeAp,int sizeTest);
+	static void dispensableReseau(int sizeAp,int sizeTest);
 };
 
 

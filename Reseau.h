@@ -7,12 +7,12 @@
 
 #ifndef RESEAU_H_
 #define RESEAU_H_
-#define NBCOUCHE 2
+#define NBCOUCHE 4
 #include <vector>
 #define BORNESUP 1
 #define BORNEINF -1
 #define MAX 40
-#define PAS  0.1
+#define PAS  0.2
 using namespace std;
 
 
@@ -21,13 +21,13 @@ class Reseau{
 private :
 	int taille[NBCOUCHE];
 	double out[NBCOUCHE][MAX];
-	double poids[NBCOUCHE-1][MAX];
+	double poids[NBCOUCHE-1][MAX*MAX];
 	double signal[NBCOUCHE-1][MAX];
 
 
 public :
 	Reseau();
-	~Reseau();
+	~Reseau(){};
 	Reseau(vector <int> cou);
 	Reseau(vector <int> couche, vector <double> pds);
 	void affiche();
