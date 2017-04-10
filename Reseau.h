@@ -12,7 +12,7 @@
 #define BORNESUP 1
 #define BORNEINF -1
 #define MAX 40
-#define PAS  0.2
+#define PAS  0.1
 using namespace std;
 
 

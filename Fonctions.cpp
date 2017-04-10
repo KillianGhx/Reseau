@@ -240,7 +240,7 @@ void Fonctions::dispensableReseau(int sizeAp,int sizeTest){
 	cout <<endl<< "LANCEMENT DU BACKPROP" <<endl;
 	double erreur = 1;
 	double nb=0;
-	while(erreur > 0.005){
+	while(erreur > 0.001){
 		erreur =0;
 	for(int i = 0 ; i < aprentissage.size();i++){
 		res.backprop(aprentissage[i],targetAprentissage[i]);
@@ -272,9 +272,101 @@ void Fonctions::dispensableReseau(int sizeAp,int sizeTest){
 
 }
 
+
 int defaussable(vector<double> exemple){
 	double cCarte=exemple[0];
 	double nCarte=exemple[1];
+	if(nCarte == 5) return 0;
+	if(exemple[cCarte*5 + nCarte + 1 ] < 2 && nCarte==1) return 1;
+	if(exemple[cCarte*5 + nCarte + 1 ] ==0) return 1;
 	return 0;
 }
+
+//permet d'aprendre si la acrte est defaussage selon la defausse
+
+void Fonctions::defaussableReseau(int sizeAp, int sizeTest){
+
+	srand(time(NULL));
+	vector<vector<double>> aprentissage;
+	vector<vector<double>> test;
+	vector<double> targetTest;
+	vector<double> targetAprentissage;
+	vector<double> tmp;
+	bool appartient;
+	vector<vector<double>>::iterator it;
+
+	//remplissage de l'ensemble d'aprentissage
+	for (int i = 0;i< sizeAp;i++){
+		tmp = {abs(rand()%5),abs((rand()%6)+1),abs(rand()%4),abs(rand()%3),abs(rand()%3),abs(rand()%3),abs(rand()%2)
+				,abs(rand()%4),abs(rand()%3),abs(rand()%3),abs(rand()%3),abs(rand()%2)
+				,abs(rand()%4),abs(rand()%3),abs(rand()%3),abs(rand()%3),abs(rand()%2)
+				,abs(rand()%4),abs(rand()%3),abs(rand()%3),abs(rand()%3),abs(rand()%2)
+				,abs(rand()%4),abs(rand()%3),abs(rand()%3),abs(rand()%3),abs(rand()%2)};
+
+		aprentissage.push_back(tmp);
+		targetAprentissage.push_back(defaussable(tmp));
+	}
+
+	//remplissage de l'ensemble de test
+	for (int i = 0;i< sizeTest;i++){
+		tmp = {abs(rand()%5),abs((rand()%6)+1),abs(rand()%4),abs(rand()%3),abs(rand()%3),abs(rand()%3),abs(rand()%2)
+				,abs(rand()%4),abs(rand()%3),abs(rand()%3),abs(rand()%3),abs(rand()%2)
+				,abs(rand()%4),abs(rand()%3),abs(rand()%3),abs(rand()%3),abs(rand()%2)
+				,abs(rand()%4),abs(rand()%3),abs(rand()%3),abs(rand()%3),abs(rand()%2)
+				,abs(rand()%4),abs(rand()%3),abs(rand()%3),abs(rand()%3),abs(rand()%2)};
+
+		appartient =false;
+		for(it = aprentissage.begin();it != aprentissage.end();it ++){
+			if((*it)==tmp){
+				appartient=true;
+			}
+		}
+
+		if(!appartient){
+			test.push_back(tmp);
+			targetTest.push_back(defaussable(tmp));
+		}
+		else{
+			i--;
+		}
+	}
+
+	srand(1);
+	Reseau res({1,5,50,27});
+	//lancement des exemples d'aprentissage avec backprop
+	cout <<endl<< "LANCEMENT DU BACKPROP" <<endl;
+	double erreur = 1;
+	double nb=0;
+	while(erreur > 0.03){
+		erreur =0;
+	for(int i = 0 ; i < aprentissage.size();i++){
+		res.backprop(aprentissage[i],targetAprentissage[i]);
+		erreur+=res.backprop(aprentissage[i],targetAprentissage[i]);
+	}
+	nb ++;
+	erreur /= sizeAp;
+	cout << "valeur de l'erreur" << erreur << endl << "nombre d'iterations " << nb << endl;
+	}
+
+	int count = 0;
+	//verification si les exemples sont bien classés
+	cout <<endl<< "LANCEMENT DE LA PHASE DE TEST" << endl;
+	for (int i = 0;i<test.size();i++){
+		res.input(test[i]);
+		res.transfert();
+		if((res.getSortie() > 0.5 && targetTest[i]==1) || (res.getSortie() < 0.5 && targetTest[i]==0)){
+			count ++;
+		}
+		else{
+			cout << "Affichage d'une erreur" << endl;
+			for (int k = 0;k < test[i].size();k++){
+				cout << " " << test[i][k];
+			}
+			cout << endl << "target : " << targetTest[i] << endl;
+		}
+	}
+	cout << "Nombre d'exemples bien classés : " << count << " sur : " << sizeTest << " exemples de test" << endl;
+
+}
+
 

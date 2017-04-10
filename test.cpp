@@ -12,11 +12,12 @@
 using namespace std;
 
 
-
 int main(){
 
 	Fonctions f;
 	f.dispensableReseau(5000,10000);
+
+
 
 //	//NE PAS OUBLIER DE CHANGER NBCOUCHE SINON C MOR LOL
 //	double errM=0.5;
