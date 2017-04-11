@@ -15,7 +15,12 @@ using namespace std;
 int main(){
 
 	Fonctions f;
-	f.dispensableReseau(5000,10000);
+	int ap,test;
+	cout << "rentrer le nombre d'exemple d'aprentissage" << endl;
+	cin >> ap;
+	cout << "rentrer le nombre de test" << endl;
+	cin >>test;
+	f.defaussableReseau(ap,test);
 
 
 

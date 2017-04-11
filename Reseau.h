@@ -9,10 +9,10 @@
 #define RESEAU_H_
 #define NBCOUCHE 4
 #include <vector>
-#define BORNESUP 1
-#define BORNEINF -1
+#define BORNESUP 5
+#define BORNEINF -5
 #define MAX 40
-#define PAS  0.1
+#define PAS  0.2
 using namespace std;
 
 
