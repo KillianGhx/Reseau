@@ -15,6 +15,7 @@ using namespace std;
 
 Reseau::Reseau() {
 	int n;
+	srand(SEED);
 	int nbCoucheCacher = 1;
 	for (int i = 0; i < NBCOUCHE; i++) {
 		if (i == 0) {
@@ -54,6 +55,7 @@ Reseau::Reseau() {
 }
 
 Reseau::Reseau(vector <int> in) {
+	srand(SEED);
 	for (int i = 0; i < NBCOUCHE; i++) {
 		taille[i] = in.at(i);
 	}

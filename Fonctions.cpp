@@ -30,6 +30,8 @@ void Fonctions::poserReseau(int sizeAp,int sizeTest){
 	bool appartient;
 	vector<vector<double>>::iterator it;
 
+	srand(SEED);
+
 	// remplissage de l'ensemble d'aprentissage
 	for (int i = 0;i< sizeAp;i++){
 		tmp = {abs(rand()%5),abs((rand()%6)+1),abs(rand()%5),abs(rand()%5)};
@@ -109,7 +111,7 @@ static int peutPoser2 (vector<double> exemple){
 }
 
 void Fonctions::poserReseau2(int sizeAp,int sizeTest){
-	srand(time(NULL));
+	srand(SEED);
 	vector<vector<double>> aprentissage;
 	vector<vector<double>> test;
 	vector<double> targetTest;
@@ -149,7 +151,7 @@ void Fonctions::poserReseau2(int sizeAp,int sizeTest){
 	cout <<endl<< "LANCEMENT DU BACKPROP" <<endl;
 	double erreur = 1;
 	double nb=0;
-	while(erreur > 0.005){
+	while(erreur > 0.02){
 		erreur =0;
 	for(int i = 0 ; i < aprentissage.size();i++){
 		res.backprop(aprentissage[i],targetAprentissage[i]);
@@ -200,7 +202,7 @@ int dispensable(vector<double> exemple){
 
 void Fonctions::dispensableReseau(int sizeAp,int sizeTest){
 
-	srand(time(NULL));
+	srand(SEED);
 	vector<vector<double>> aprentissage;
 	vector<vector<double>> test;
 	vector<double> targetTest;
@@ -234,13 +236,12 @@ void Fonctions::dispensableReseau(int sizeAp,int sizeTest){
 			i--;
 		}
 	}
-	srand(1);
 	Reseau res({1,8,20,7});
 	//lancement des exemples d'aprentissage avec backprop
 	cout <<endl<< "LANCEMENT DU BACKPROP" <<endl;
 	double erreur = 1;
 	double nb=0;
-	while(erreur > 0.001){
+	while(erreur > 0.02){
 		erreur =0;
 	for(int i = 0 ; i < aprentissage.size();i++){
 		res.backprop(aprentissage[i],targetAprentissage[i]);
@@ -286,7 +287,7 @@ int defaussable(vector<double> exemple){
 
 void Fonctions::defaussableReseau(int sizeAp, int sizeTest){
 
-	srand(time(NULL));
+	srand(SEED);
 	vector<vector<double>> aprentissage;
 	vector<vector<double>> test;
 	vector<double> targetTest;

@@ -14,14 +14,16 @@ using namespace std;
 
 int main(){
 
+
 	Fonctions f;
+	while(true){
 	int ap,test;
 	cout << "rentrer le nombre d'exemple d'aprentissage" << endl;
 	cin >> ap;
-	cout << "rentrer le nombre de test" << endl;
-	cin >>test;
-	f.defaussableReseau(ap,test);
-
+//	cout << "rentrer le nombre de test" << endl;
+//	cin >>test;
+	f.defaussableReseau(ap,30000);
+	}
 
 
 //	//NE PAS OUBLIER DE CHANGER NBCOUCHE SINON C MOR LOL
